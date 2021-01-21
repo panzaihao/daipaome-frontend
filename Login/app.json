@@ -1,0 +1,44 @@
+{
+  "pages": [
+    "pages/authorize/authorize", 
+    "pages/home/home",
+    "pages/orders/orders",
+    "pages/usercenter/usercenter"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "Weixin",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#6e6d6b",
+    "selectedColor": "#4a90e2",
+    "borderStyle": "black",
+    "backgroundColor": "#fff",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/home_selected.png",
+        "text": "首页"
+      },
+
+      {
+        "pagePath": "pages/orders/orders",
+        "iconPath": "images/orders.png",
+        "selectedIconPath": "images/orders_selected.png",
+        "text": "订单"
+      },
+
+      {
+        "pagePath": "pages/usercenter/usercenter",
+        "iconPath": "images/usercenter.png",
+        "selectedIconPath": "images/usercenter_selected.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}
