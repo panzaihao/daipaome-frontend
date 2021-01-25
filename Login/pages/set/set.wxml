@@ -1,0 +1,35 @@
+<view class="resister">
+  <!-- 按键ui比较丑 -->
+  <form bindsubmit="submit">
+    <mp-cells>
+      <mp-cell title="你的昵称：" wx:if="{{setting == 2}}">
+        <!-- 个人昵称 -->
+        <view class="nickname">
+          <input name="nickname" placeholder="长度少于20位，不要有空格" bindinput="setNickname" maxlength="20" value="{{userInfo.nickName}}"/>
+        </view>
+      </mp-cell>
+      <mp-cell title="性别：" wx:if="{{setting == 3}}">
+        <radio-group  name="sex" class="group" bindchange="setSex">
+        <radio value="0">男</radio>
+        <radio value="1" style="margin-left:12px">女</radio>
+      </radio-group>
+      </mp-cell>
+
+      <!-- 手机号 -->
+      <mp-cell title="手机号：" wx:if="{{setting == 4}}">
+        <view class="phonenum">
+          <input name="phonenumber" type="number" placeholder="请输入你的11位手机号" maxlength="11" value="{{phone}}" bindinput="setphone"/>
+         </view>
+      </mp-cell>
+      <text wx:if="{{!IsphoneVaild}}" class="tip">请输入正确格式电话号码</text>
+    </mp-cells>
+
+    <!-- 验证码 -->
+    <!-- <view class="check"> 
+      <text>验证码：</text>
+      <input name="checknum" type="number" placeholder="请输入验证码" bindinput="checknumber"/>
+    </view>    -->
+    <button form-type="reset" class="btn_submit" size="mini">重置</button>
+    <button form-type="submit" type="primary" class="btn_submit_com" size="mini">确认</button>
+  </form>
+</view>

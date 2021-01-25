@@ -3,7 +3,12 @@
     "pages/authorize/authorize", 
     "pages/home/home",
     "pages/orders/orders",
-    "pages/usercenter/usercenter"
+    "pages/usercenter/usercenter",
+    "pages/set/set",
+    "pages/setAddr/setAddr",
+    "pages/setPwd/setPwd",
+    "pages/manageOrder/manageOrder",
+    "pages/addAddr/addAddr"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -40,5 +45,9 @@
     ]
   },
   "style": "v2",
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "useExtendedLib": {
+    "kbone": true,
+    "weui": true
+  }
 }

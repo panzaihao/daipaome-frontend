@@ -17,5 +17,8 @@ App({
   globalData: {
     userInfo: null,
     openid: "",
+    nickname: '',
+    phone: '',
+    sex: ''
   },
 });
