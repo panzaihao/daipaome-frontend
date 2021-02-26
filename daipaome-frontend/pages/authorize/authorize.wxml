@@ -1,18 +1,13 @@
-<!--authorize.wxml-->
 <view wx:if="{{canIUse}}">
-    <view class='header'>
-        <image src='../../images/forever.jpg'></image>
-    </view>
-
+    <image class="logo" src='/images/dpm.jpg'></image>
     <view class='content'>
-        <view>申请获取以下权限</view>
-        <text>获得你的公开信息（昵称，头像等）</text>
+        <view style="font-weight:bold;font-size:18px;">代跑么</view>
+        <view>校园出行小程序</view>
     </view>
-
-    <button class='bottom' type='primary' open-type="getUserInfo" lang="zh_CN" bindgetuserinfo="bindGetUserInfo">
-        授权登录
-    </button>
+    <view class="padding flex flex-direction">
+        <button open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" class="cu-btn bg-red lg">
+            <text class="cuIcon-weixin">微信授权登录</text>
+        </button>
+    </view>
 </view>
-
 <view wx:else>请升级微信版本</view>
-  

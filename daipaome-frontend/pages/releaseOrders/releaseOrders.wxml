@@ -1,0 +1,4 @@
+<van-cell-group title="选择物品类型">
+  <van-cell title="快递" is-link icon="cart-o" islink link-type="navigateTo" url="/pages/releaseExpress/releaseExpress"></van-cell>
+  <van-cell title="非快递" is-link icon="bag-o" islink link-type="navigateTo" url="/pages/releaseFruit/releaseFruit"></van-cell>
+</van-cell-group>

@@ -13,7 +13,7 @@ Page({
     inputPre: '',
     pwd:"",
     encryptPwd: '',
-    compwd: ''
+    comPwd: ''
   },
 
   /**
@@ -29,22 +29,12 @@ Page({
       },
       success(res) {
         console.log(res.data.password)
-        if(res.statusCode === 201){
-          that.setData({
-            prePwd: res.data.password
-          })
-        } else{
-          wx.showModal({
-            title: '提示',
-            content: 'error',
-          })
-        }
+        that.setData({
+          prePwd: res.data.password
+        })
       },
       fail(err){
-        wx.showModal({
-          title: '提示',
-          content: '网络错误',
-        })
+
       }
     })
   },
@@ -53,7 +43,7 @@ Page({
     var password = e.detail.value
     let encryptPwd = md5(password)
     console.log(encryptPwd)
-    if(password.length >= 6 && password.length <= 20){
+    if(password.length > 6 && password.length < 20){
       this.setData({
         pwd: password,
         encryptPwd: encryptPwd,
@@ -70,7 +60,7 @@ Page({
   compwd: function(e){
     var compassword = e.detail.value;
     console.log(e)
-    if(compassword === this.data.pwd && this.data.pwd != ''){
+    if(compassword === this.data.pwd && this.data.pwd != '' ){
       this.setData({
         IspwdSome: true
       })
@@ -90,8 +80,7 @@ Page({
   },
   submit: function(e){
     var prePwd = this.data.prePwd
-    if(this.data.IspwdSome && this.data.IspasswordVaild && 
-      ((prePwd === md5(this.data.inputPre)) || this.data.inputPre === '')){
+    if(this.data.IspwdSome && this.data.IspasswordVaild && ((prePwd === md5(this.data.inputPre)) || this.data.inputPre === '')){
       wx.request({
         url: 'http://'+app.globalData.backend_server+'/setPwd',
         method: 'POST',

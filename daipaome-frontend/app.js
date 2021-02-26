@@ -14,12 +14,13 @@ App({
       })
     }
   }, 
+  
   globalData: {
     userInfo: null,
     openid: "",
     nickname: '',
     phone: '',
     sex: '',
-    backend_server: 'localhost:8000',
+    backend_server: '192.168.137.132:8000',
   },
 });

@@ -14,3 +14,9 @@
   margin: 20rpx;
   margin-left: 50vw;
 }
+
+.tip{
+  font-size: 12px;
+  color:red;
+  margin-left: 16px
+}

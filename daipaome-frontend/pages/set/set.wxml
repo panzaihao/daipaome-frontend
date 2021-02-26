@@ -16,14 +16,13 @@
       </mp-cell>
 
       <!-- 手机号 -->
-      <view wx:if="{{setting == 4}}">
-        <mp-cell title="手机号：">
-          <view class="phonenum">
-            <input name="phonenumber" type="number" placeholder="请输入你的11位手机号" maxlength="11" value="{{phone}}" bindinput="setphone"/>
-          </view>
-        </mp-cell>
-        <text wx:if="{{!IsphoneVaild}}" class="tip">请输入正确格式电话号码</text>
-      </view>
+      <mp-cell title="手机号：" wx:if="{{setting == 4}}">
+        <view class="phonenum">
+          <input name="phonenumber" type="number" placeholder="请输入你的11位手机号" maxlength="11" value="{{phone}}" bindinput="setphone"/>
+         </view>
+         <text wx:if="{{!IsphoneVaild}}" class="tip">请输入正确格式电话号码</text>
+      </mp-cell>
+      
     </mp-cells>
 
     <!-- 验证码 -->

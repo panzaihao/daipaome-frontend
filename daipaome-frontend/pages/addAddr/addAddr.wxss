@@ -1,4 +1,4 @@
-
+@import "../../weui.wxss";
 
 .weui-cells:before {
   top: 0;
@@ -16,4 +16,10 @@
 
 .weui-btn {
   width: 80%;
+}
+
+.tip{
+  font-size: 12px;
+  color:red;
+  margin-left: 16px
 }

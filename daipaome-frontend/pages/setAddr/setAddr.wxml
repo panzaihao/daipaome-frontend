@@ -2,14 +2,14 @@
   <view wx:for="{{addressList}}">
     <view class="product-name-wrap">
       <view class="ui-list-item-info">
-        {{item.consignee}}
+        {{item.consignee_name}}
         <text decode="{{true}}" space="{{true}}">&nbsp;&nbsp;</text>
-        {{item.mobile}}
+        {{item.phone}}
       </view>
 
       <view class="ui-list-item-address">
         <p>{{item.address}}</p>
-        <p class="ui-list-item-del" data-id="{{index}}" bindtap="delAddress">删除</p>
+        <p class="ui-list-item-del" data-id="{{index}}" id="{{index}}" bindtap="delAddress">删除</p>
       </view>
 
       <view class="separate"></view>
@@ -17,6 +17,6 @@
   </view>
 </scroll-view>
 
-<view class="add-address" bindtap="addAddress">
-  <text>新增地址</text>
+<view wx:if="{{addressList.length < 3}}">
+  <button type="primary" bindtap="addAddress">新增地址</button>
 </view>

@@ -1,14 +1,35 @@
+const app = getApp();
+
 Page({
   data: {
     addressList: []
   },
-
+  
   onLoad: function (options) {
-    var arr = wx.getStorageSync('addressList') || [];
-    console.log('缓存数据' + arr);
-
-    this.setData({
-      addressList: arr
+    var that=this
+    wx.request({
+      url: 'http://192.168.137.132:8000/getAddrInfo',
+      method: 'GET',
+      data: {
+        openid: app.globalData.openid,
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res)
+        var data = res.data
+        if (res.statusCode == 201) {
+          that.setData({
+            addressList: data.addressList
+          })
+        } else {
+          wx.showModal({
+            title: '提示',
+            content: res.errMsg
+          })
+        }
+      }
     })
   },
 
@@ -23,18 +44,30 @@ Page({
   },
 
   delAddress: function (e) {
-    this.data.addressList.splice(e.target.id.substring(3), 1);
+    var that = this
+    var index = e.target.id
+    var delAddrInfo = this.data.addressList[index]
+    console.log(index)
+    wx.request({
+      url: 'http://192.168.137.132:8000/delAddr',
+      method: 'POST',
+      data: {
+        openid: app.globalData.openid,
+        delAddrInfo: delAddrInfo,
+        index: index
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res) {
+        console.log(res)
+      }
+    })
+
+    that.data.addressList.splice(e.target.id.substring(3), 1);
     // 更新data数据对象
-    if (this.data.addressList.length > 0) {
-      this.setData({
-        addressList: this.data.addressList
-      })
-      wx.setStorageSync('addressList', this.data.addressList);
-    } else {
-      this.setData({
-        addressList: this.data.addressList
-      })
-      wx.setStorageSync('addressList', []);
-    }
+    that.setData({
+      addressList: that.data.addressList
+    })
   }
 })

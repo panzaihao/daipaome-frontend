@@ -1,21 +1,23 @@
 var addressList = null;
+const app = getApp();
 
 Page({
   data: {
-    sexIndex: 0,
-    sexArray: ['男', '女', '未知'],
+    isValidMobile: false,
     addressIndex: [0, 0],
     addressArray: [
-      ['雁南园', '雁北园'],
+      ['雁南园', '雁北园', '图书馆', '教学S楼', '教学N楼'],
       ['s1', 's2', 's3', 's4']
     ]
   },
 
-  bindSexChange: function (e) {
-    console.log('picker发送选择改变，携带值为', e.detail.value)
-    this.setData({
-      sexIndex: e.detail.value
-    })
+  setMobile: function (e) {
+    console.log(e)
+    if (e.detail.value.length == 11) {
+      this.setData({
+        isValidMobile: true
+      })
+    }
   },
 
   bindAddressChange: function (e) {
@@ -37,6 +39,12 @@ Page({
         data.addressArray[1] = ['s1', 's2', 's3', 's4'];
       else if (data.addressIndex[0] == 1)
         data.addressArray[1] = ['n1', 'n2', 'n3', 'n4'];
+      else if (data.addressIndex[0] == 2)
+        data.addressArray[1] = ['自习室', '2楼', '3楼', '4楼', '5楼'];
+      else if (data.addressIndex[0] == 3)
+        data.addressArray[1] = ['1楼', '2楼', '3楼', '4楼', '5楼'];
+      else if (data.addressIndex[0] == 4)
+        data.addressArray[1] = ['1楼', '2楼', '3楼', '4楼', '5楼'];
       data.addressIndex[1] = 0;
     }
     this.setData(data);
@@ -44,24 +52,46 @@ Page({
 
   saveAddress: function (e) {
     var consignee = e.detail.value.consignee;
-    var sex = e.detail.value.sex;
     var mobile = e.detail.value.mobile;
-    var address_garden = e.detail.value.address_garden;
-    var address_building = e.detail.value.address_building;
-    var dormitory = e.detail.value.dormitory;
+    var address_first = e.detail.value.address_first;
+    var address_second = e.detail.value.address_second;
+    var detailed_address = e.detail.value.detailed_address;
 
-    console.log(consignee + '，' + sex + '，' + address_garden + address_building + dormitory);
+    console.log(consignee + '，' + mobile + '，' + address_first + address_second + detailed_address);
 
-    var arr = wx.getStorageSync('addressList') || [];
-    addressList = {
-      consignee: consignee,
-      mobile: mobile,
-      address: address_garden + ' ' + address_building + ' ' + dormitory
+    var isValidMobile = this.data.isValidMobile;
+    if (!isValidMobile) {
+      wx.showModal({
+        title: '提示',
+        content: '请输入正确格式的手机号码',
+        showCancel: false,
+        success(res) {
+          console.log(res.confirm)
+        }
+      })
+    } else {
+      var addr = {
+        consignee_name: consignee,
+        phone: mobile,
+        address: address_first + ' ' + address_second + ' ' + detailed_address,
+        openID: app.globalData.openid
+      }
+      
+      wx.request({
+        url: 'http://192.168.137.132:8000/addAddr',
+        method: 'POST',
+        data: addr,
+        header: {
+          'content-type': 'application/json' // 默认值
+        },
+        success(res) {
+          console.log(res)
+        }
+      });
+
+      wx.navigateBack({
+        
+      })
     }
-    arr.push(addressList);
-    wx.setStorageSync('addressList', arr);
-    wx.navigateBack({
-
-    })
   }
 })

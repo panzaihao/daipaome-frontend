@@ -1,53 +1,59 @@
 {
+  "permission": { "scope.userLocation": { "desc": "你的位置信息将用于获取...." } },
+  "requiredBackgroundModes": [
+    "location"
+  ],
   "pages": [
-    "pages/authorize/authorize", 
+    "pages/authorize/authorize",
     "pages/home/home",
+    "pages/wechat/wechat",
+    "pages/orderDetail/orderDetail",
+    "pages/takeOrders/takeOrders",
+    "pages/releaseOrders/releaseOrders",
     "pages/orders/orders",
     "pages/usercenter/usercenter",
     "pages/set/set",
     "pages/setAddr/setAddr",
     "pages/setPwd/setPwd",
     "pages/manageOrder/manageOrder",
-    "pages/addAddr/addAddr"
+    "pages/addAddr/addAddr",
+    "pages/resource/resource",
+    "pages/treeHole/treeHole",
+    "pages/releaseExpress/releaseExpress",
+    "pages/releaseFruit/releaseFruit"
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
+    "navigationBarBackgroundColor": "#4A90E2",
     "navigationBarTitleText": "Weixin",
-    "navigationBarTextStyle": "black"
+    "navigationBarTextStyle": "white"
   },
   "tabBar": {
     "color": "#6e6d6b",
     "selectedColor": "#4a90e2",
     "borderStyle": "black",
     "backgroundColor": "#fff",
-    "list": [
-      {
+    "list": [{
         "pagePath": "pages/home/home",
         "iconPath": "images/home.png",
-        "selectedIconPath": "images/home_selected.png",
-        "text": "首页"
+        "selectedIconPath": "images/home_selected.png"
       },
-
       {
-        "pagePath": "pages/orders/orders",
-        "iconPath": "images/orders.png",
-        "selectedIconPath": "images/orders_selected.png",
-        "text": "订单"
+        "pagePath": "pages/manageOrder/manageOrder",
+        "iconPath": "images/manage_.png",
+        "selectedIconPath": "images/manage_selected.png"
       },
-
       {
         "pagePath": "pages/usercenter/usercenter",
         "iconPath": "images/usercenter.png",
-        "selectedIconPath": "images/usercenter_selected.png",
-        "text": "我的"
+        "selectedIconPath": "images/usercenter_selected.png"
       }
     ]
   },
-  "style": "v2",
   "sitemapLocation": "sitemap.json",
   "useExtendedLib": {
     "kbone": true,
     "weui": true
-  }
+  },
+  "cloud": true
 }
