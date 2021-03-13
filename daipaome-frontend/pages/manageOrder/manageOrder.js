@@ -15,6 +15,7 @@ Page({
     // cancelOrder: null,
     // unpayOrder:null,
     // takeList: []
+    orderInfo:null,
     order: [
       {orderID: 10212012003, name: '李四', phone: '13335784245', status: '正在派送',date: '2021-2-20'},
       {orderID: 10212012004, name: '张三', phone: '13707577576', status: '订单已接',date: '2021-2-19'},
@@ -38,6 +39,7 @@ Page({
     var a = {id: 10212012005, name: '', phone: '', status: 110001,date: '2021-2-21'}
     //this.data.nowOrder.push(a)
     var order = null;
+    var orderInfo = null;
     var nowOrder = [];
     var hisOrder = [];
     var cancelOrd = [];
@@ -140,11 +142,14 @@ Page({
   // 订单详情，由于这里是已经接过或者已经发过的订单，这里的信息不做保密处理
   order: function(e){
     console.log(e)
-    var orderID = e.currentTarget.id
+    var index = e.currentTarget.id
+    var orderID = this.data.order[index].orderID
+    var originAddress = this.data.order[index].pickupAddress
+    var endAddress = this.data.order[index].consigneeAddress
     wx.navigateTo({
       url: '../orders/orders',
       success(res) {
-        res.eventChannel.emit('acceptDataFromOpenerPage', { orderID: orderID})
+        res.eventChannel.emit('acceptDataFromOpenerPage', { orderID: orderID,originAddress:originAddress,endAddress:endAddress})
       }
     })
   }

@@ -306,6 +306,7 @@ Page({
 
   // 接单成功后向派单人发送提醒消息
   sendTextMessage: function (orderID) {
+    console.log(orderID)
     let that = this
     wx.request({
       url: 'http://192.168.137.132:8000/getInfoByOrderID',
@@ -320,6 +321,7 @@ Page({
       success(res) {
         console.log(res)
         var data = res.data
+
         if (res.statusCode == 201) {
           let id = data.openID,
             avatar = data.avatar,
@@ -332,7 +334,7 @@ Page({
               type: wx.GoEasyIM.SCENE.PRIVATE,
               data: {
                 name: name,
-                avatar: avatar
+                avatar: "/images/bupt1.jpg"
               }
             }
           });

@@ -24,24 +24,31 @@ Page({
   onLoad: function (options) {
     let friend = null
     let friendId = options.to
+    console.log(friendId)
+    var that = this
     wx.request({
       url: 'http://192.168.137.132:8000/getInfoByOpenID',
       method: 'GET',
       data: {
-        openID: frindId
+        openID: friendId
       },
       header: {
         'content-type': 'application/json'
       },
       success(res) {
         console.log(res)
+        
         var data = res.data
+        console.log(data,friendId)
         if (res.statusCode == 201) {
           friend = {
             uuid: friendId,
             name: data.nickName,
             avatar: data.avatar
           }
+          that.setData({
+            friend:friend
+          })
         }
       }
     })
@@ -110,8 +117,10 @@ Page({
 
   sendTextMessage() {
     if (this.data.content.trim() !== '') {
+      console.log(this.data.friend)
       let textMessage = wx.im.createTextMessage({
         text: this.data.content,
+        
         to: {
           id: this.data.friend.uuid,
           type: wx.GoEasyIM.SCENE.PRIVATE,
