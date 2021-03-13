@@ -1,1 +1,5 @@
 /* pages/orders/orders.wxss */
+.map {
+  width: 100%; 
+  height: 150px;
+}
