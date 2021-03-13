@@ -1,4 +1,6 @@
 const app = getApp()
+const data = require('../../utils/util')
+const BUPT = data.BUPT
 
 Page({
   data: {
@@ -6,12 +8,12 @@ Page({
   },
 
   onLoad: function (options) {
-    const eventChannel = this.getOpenerEventChannel()
-    var that=this
-     var id = 1
-        eventChannel.on('acceptDataFromOpenerPage', function(data) {
-          id = data.orderID
-        })
+    const eventChannel = this.getOpenerEventChannel()
+    var that = this
+    var id = 1
+    eventChannel.on('acceptDataFromOpenerPage', function (data) {
+      id = data.orderID
+    })
     wx.request({
       url: 'http://192.168.137.132:8000/getOrderInfo',
       method: 'GET',
@@ -40,9 +42,34 @@ Page({
     })
   },
 
+  // 路线规划
+  routePlan: function (e) {
+    let start = BUPT.findIndex(item => item.addr == this.data.orderInfo.pickupAddress)
+    console.log(this.data.orderInfo)
+    let end = BUPT.findIndex(item => item.addr == this.data.orderInfo.consigneeAddress)
+    console.log(start)
+    let plugin = requirePlugin('routePlan');
+    let key = 'I3TBZ-3SAKP-HNWDR-VW42R-7PWMV-KSBIS'; // 使用在腾讯位置服务申请的key
+    let startPoint = JSON.stringify({ // 起点
+      'name': BUPT[start].addr,
+      'latitude': BUPT[start].la,
+      'longitude': BUPT[start].lo
+    });
+    let referer = 'DPM'; // 调用插件的app的名称
+    let endPoint = JSON.stringify({ // 终点
+      'name': BUPT[end].addr,
+      'latitude': BUPT[end].la,
+      'longitude': BUPT[end].lo
+    });
+    wx.navigateTo({
+      url: 'plugin://routePlan/index?key=' + key + '&referer=' + referer + '&startPoint=' + startPoint + '&endPoint=' + endPoint
+    });
+  },
+
   bindTap: function (e) {
     console.log(e)
     var that = this
+    let orderID = e.currentTarget.dataset.id
     wx.showModal({
       title: '接单',
       content: '您是否确定接单？',
@@ -53,7 +80,7 @@ Page({
             method: 'POST',
             data: {
               openID: app.globalData.openid,
-              orderID: e.currentTarget.dataset.id,
+              orderID: orderID,
               status: 1 // 1表示已接单
             },
             header: {
@@ -67,6 +94,7 @@ Page({
                 icon: 'success',
                 duration: 2000
               })
+              that.sendTextMessage(orderID)
             }
           })
           console.log("确定接单")
@@ -75,5 +103,53 @@ Page({
         }
       }
     })
+  },
+
+  // 接单成功后向派单人发送提醒消息
+  sendTextMessage: function (orderID) {
+    let that = this
+    wx.request({
+      url: 'http://192.168.137.132:8000/getInfoByOrderID',
+      method: 'GET',
+      data: {
+        openID: app.globalData.openid,
+        orderID: orderID
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      success(res) {
+        console.log(res)
+        var data = res.data
+        if (res.statusCode == 201) {
+          let id = data.openID,
+            avatar = data.avatar,
+            name = data.nickName;
+          // 创建文本消息
+          let textMessage = wx.im.createTextMessage({
+            text: '您的订单' + orderID + '由我进行派送~',
+            to: {
+              id: id,
+              type: wx.GoEasyIM.SCENE.PRIVATE,
+              data: {
+                name: name,
+                avatar: avatar
+              }
+            }
+          });
+          that.sendMessage(textMessage);
+        }
+      }
+    })
+  },
+
+  sendMessage(message) {
+    let promise = wx.im.sendMessage(message)
+    promise.then((res) => {
+        console.log('发送消息成功')
+      })
+      .catch(e => {
+        console.log('发送失败', e)
+      })
   }
 })

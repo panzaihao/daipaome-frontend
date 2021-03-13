@@ -1,5 +1,5 @@
 <view class="cu-bar search bg-white">
-  <image src="/images/cat.jpg" class="cu-avatar round"></image>
+  <image src="{{avatarUrl}}" class="cu-avatar round"></image>
   <view class="search-form round">
     <text class="cuIcon-search"></text>
     <input type="text" placeholder="请输入搜索关键词" confirm-type="search"></input>
@@ -72,3 +72,4 @@
 </view>
 
 <van-divider hairline="{{true}}" contentPosition="center">代跑么</van-divider>
+

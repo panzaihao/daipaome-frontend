@@ -1,5 +1,15 @@
 {
-  "permission": { "scope.userLocation": { "desc": "你的位置信息将用于获取...." } },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于获取...."
+    }
+  },
+  "plugins": {
+    "routePlan": {
+      "version": "1.0.12",
+      "provider": "wx50b5593e81dd937a"
+    }
+  },
   "requiredBackgroundModes": [
     "location"
   ],
@@ -20,7 +30,10 @@
     "pages/resource/resource",
     "pages/treeHole/treeHole",
     "pages/releaseExpress/releaseExpress",
-    "pages/releaseFruit/releaseFruit"
+    "pages/releaseFruit/releaseFruit",
+    "pages/IM/IM",
+    "pages/chat/groupChat/groupChat",
+		"pages/chat/privateChat/privateChat"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -42,6 +55,11 @@
         "pagePath": "pages/manageOrder/manageOrder",
         "iconPath": "images/manage_.png",
         "selectedIconPath": "images/manage_selected.png"
+      },
+      {
+        "pagePath": "pages/IM/IM",
+        "iconPath": "images/IM.png",
+        "selectedIconPath": "images/IM_selected.png"
       },
       {
         "pagePath": "pages/usercenter/usercenter",

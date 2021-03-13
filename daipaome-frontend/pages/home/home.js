@@ -1,6 +1,7 @@
-// logs.js
 const util = require('../../utils/util.js')
 const app = getApp()
+import IMService from '../../IM/imservice'
+
 Page({
   data: {
     array: ['沙河校区', '西土城校区', '宏福校区'],
@@ -36,51 +37,69 @@ Page({
       src: "/images/chat.png",
     }],
     objectList: [{
-      isExpress: '1',
-      money: '2.00',
-      description: '哈哈哈哈',
-      time: '今天出发',
-      orderID: '537',
-      isUrgent: '1',
-      submitDate: '2021-02-16 21:05:00'
-    }, {
-      isExpress: '2',
-      money: '2.00',
-      description: '哈哈哈哈',
-      time: '今天出发',
-      orderID: '538',
-      isUrgent: '1',
-      submitDate: '2021-02-16 21:15:00'
-    },
-    {
-      isExpress: '3',
-      money: '2.00',
-      description: '哈哈哈哈',
-      time: '今天出发',
-      orderID: '539',
-      isUrgent: '1',
-      submitDate: '2021-02-15 21:05:00'
-    }, {
-      isExpress: '4',
-      money: '2.00',
-      description: '哈哈哈哈',
-      time: '今天出发',
-      orderID: '540',
-      isUrgent: '1',
-      submitDate: '2021-02-17 16:05:00'
-    }, {
-      isExpress: '5',
-      money: '2.00',
-      description: '哈哈哈哈',
-      time: '17:00',
-      orderID: '538',
-      isUrgent: '0',
-      submitDate: '2021-02-17 21:05:00'
-    }]
+        isExpress: '1',
+        money: '2.00',
+        description: '哈哈哈哈',
+        time: '今天出发',
+        orderID: '537',
+        isUrgent: '1',
+        submitDate: '2021-02-16 21:05:00'
+      }, {
+        isExpress: '2',
+        money: '2.00',
+        description: '哈哈哈哈',
+        time: '今天出发',
+        orderID: '538',
+        isUrgent: '1',
+        submitDate: '2021-02-16 21:15:00'
+      },
+      {
+        isExpress: '3',
+        money: '2.00',
+        description: '哈哈哈哈',
+        time: '今天出发',
+        orderID: '539',
+        isUrgent: '1',
+        submitDate: '2021-02-15 21:05:00'
+      }, {
+        isExpress: '4',
+        money: '2.00',
+        description: '哈哈哈哈',
+        time: '今天出发',
+        orderID: '540',
+        isUrgent: '1',
+        submitDate: '2021-02-17 16:05:00'
+      }, {
+        isExpress: '5',
+        money: '2.00',
+        description: '哈哈哈哈',
+        time: '17:00',
+        orderID: '538',
+        isUrgent: '0',
+        submitDate: '2021-02-17 21:05:00'
+      }
+    ],
+    avatarUrl: ''
   },
 
   onLoad: function () {
-    console.log("欢迎使用代跑么小程序")
+    let currentUser = {
+      uuid: app.globalData.openid,
+      name: app.globalData.nickName,
+      avatar: app.globalData.avatarUrl
+    }
+    app.globalData.user = currentUser
+
+    // 连接到GoEasy
+    if (wx.im.getStatus() === 'disconnected') {
+      app.globalData.imService = new IMService(wx.im);
+      app.globalData.imService.connectIM(currentUser);
+    }
+
+    this.setData({
+      avatarUrl: app.globalData.avatarUrl
+    })
+    console.log(this.data.avatarUrl)
     var that = this
     wx.request({
       url: 'http://192.168.137.132:8000/getObjectInfo',
@@ -215,16 +234,19 @@ Page({
 
   toDetail: function (e) {
     console.log(e)
-     wx.navigateTo({
-            url: '/pages/orderDetail/orderDetail',
-            success(res) {
-              res.eventChannel.emit('acceptDataFromOpenerPage', { orderID: e.currentTarget.dataset.id})
-            }
-          })
+    wx.navigateTo({
+      url: '/pages/orderDetail/orderDetail',
+      success(res) {
+        res.eventChannel.emit('acceptDataFromOpenerPage', {
+          orderID: e.currentTarget.dataset.id
+        })
+      }
+    })
   },
 
   bindTap: function (e) {
     var that = this
+    let orderID = e.currentTarget.dataset.id
     wx.showModal({
       title: '接单',
       content: '您是否确定接单？',
@@ -235,7 +257,7 @@ Page({
             method: 'POST',
             data: {
               openID: app.globalData.openid,
-              orderID: e.currentTarget.dataset.id,
+              orderID: orderID,
               status: 1 // 1表示已接单
             },
             header: {
@@ -249,6 +271,7 @@ Page({
                 icon: 'success',
                 duration: 2000
               })
+              that.sendTextMessage(orderID)
             }
           })
           console.log("确定接单")
@@ -279,5 +302,53 @@ Page({
         })
         break;
     }
+  },
+
+  // 接单成功后向派单人发送提醒消息
+  sendTextMessage: function (orderID) {
+    let that = this
+    wx.request({
+      url: 'http://192.168.137.132:8000/getInfoByOrderID',
+      method: 'GET',
+      data: {
+        openID: app.globalData.openid,
+        orderID: orderID
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      success(res) {
+        console.log(res)
+        var data = res.data
+        if (res.statusCode == 201) {
+          let id = data.openID,
+            avatar = data.avatar,
+            name = data.nickName;
+          // 创建文本消息
+          let textMessage = wx.im.createTextMessage({
+            text: '您的订单' + orderID + '由我进行派送~',
+            to: {
+              id: id,
+              type: wx.GoEasyIM.SCENE.PRIVATE,
+              data: {
+                name: name,
+                avatar: avatar
+              }
+            }
+          });
+          that.sendMessage(textMessage);
+        }
+      }
+    })
+  },
+
+  sendMessage(message) {
+    let promise = wx.im.sendMessage(message)
+    promise.then((res) => {
+        console.log('发送消息成功')
+      })
+      .catch(e => {
+        console.log('发送失败', e)
+      })
   }
 })

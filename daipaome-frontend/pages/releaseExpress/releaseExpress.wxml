@@ -2,22 +2,27 @@
   <van-cell-group title="快递信息">
     <van-field left-icon="edit" custom-style="height:80px;" type="textarea" name="message" maxlength="50" label="简单描述"
       type="textarea" placeholder="请简要描述您的快递(不超过50字)" autosize />
-    <van-cell icon="gem-o" title="易碎物品">
+    <!-- <van-cell icon="gem-o" title="易碎物品">
       <radio-group name="isFragile">
         <radio class="red margin-left-sm" value="1" /> 是
         <radio class="red margin-left-sm" value="0" /> 否
       </radio-group>
-    </van-cell>
-    <van-field left-icon="location-o" name="pickup_address" label="取件地址" placeholder="请输入取件的具体位置" />
-    <van-cell icon="location-o" is-link title="配送地址" label="点击选择">
-      <picker mode="multiSelector" bindchange="bindAddressChange" bindcolumnchange="bindAddressColumnChange"
-        value="{{addressIndex}}" range="{{addressArray}}">{{addressArray[1][addressIndex[1]]}}</picker>
-      <input name="consignee_address" hidden="true" value="{{addressArray[1][addressIndex[1]]}}" />
-    </van-cell>
-    <van-cell icon="clock-o" is-link title="配送时间" label="点击选择">
-      <picker mode="time" value="{{time}}" start="00:00" end="23:59" bindchange="bindTimeChange">{{time}}</picker>
-      <input name="time" hidden="true" value="{{array[index]}}" />
-    </van-cell>
+    </van-cell> -->
+    <picker bindchange="BindPickerChange" value="{{pickupIndex}}" range="{{pickupAddr}}">
+      <van-cell icon="location-o" is-link title="取件地址" label="点击选择"> {{pickupAddr[pickupIndex]}}</van-cell>
+    </picker>
+    <input name="pickup_address" hidden="true" value="{{pickupAddr[pickupIndex]}}" />
+    <picker mode="multiSelector" bindchange="bindAddressChange" bindcolumnchange="bindAddressColumnChange"
+      value="{{addressIndex}}" range="{{addressArray}}">
+      <van-cell icon="location-o" is-link title="配送地址" label="点击选择">
+        {{addressArray[0][addressIndex[0]]}}{{addressArray[1][addressIndex[1]]}}</van-cell>
+    </picker>
+    <input name="consignee_address" hidden="true"
+      value="{{addressArray[0][addressIndex[0]]}}{{addressArray[1][addressIndex[1]]}}" />
+    <picker mode="time" value="{{time}}" start="00:00" end="23:59" bindchange="bindTimeChange">
+      <van-cell icon="clock-o" is-link title="配送时间" label="点击选择">{{time}}</van-cell>
+    </picker>
+    <input name="time" hidden="true" value="{{time}}" />
     <van-cell icon="sign" title="现在出发">
       <radio-group name="isUrgent" bindchange="bindChange">
         <radio class="red margin-left-sm" value="1" /> 是
@@ -31,12 +36,7 @@
 
   <van-cell-group title="收件人信息">
     <van-field left-icon="user-o" name="realName" label="姓名" placeholder="请输入您的真实姓名" />
-    <view wx:if="{{isUsualAddress == true}}">
-      <van-field left-icon="phone-o" name="mobile" label="手机" value="{{mobiles[addressIndex[1]]}}" />
-    </view>
-    <view wx:else>
-      <van-field left-icon="phone-o" name="mobile" label="手机" placeholder="请输入您的手机号码" />
-    </view>
+    <van-field left-icon="phone-o" name="mobile" label="手机" placeholder="请输入您的手机号码" />
   </van-cell-group>
 
   <!-- <van-cell-group title="截图信息" border="{{false}}">

@@ -1,14 +1,10 @@
 <!--pages/orders/orders.wxml-->
-<view>订单配送实况：</view>
 <map
-  class="map"
-  longitude="{{longtitude}}"
-  latitude="{{latitude}}"
-  scale="15"
-  min-scales="13"
+  longitude="{{endLongtitude}}"
+  latitude="{{endLatitude}}"
+  min-scales="15"
   max-scales="20"
   bindtap="getLocaltion"
-  markers="{{markers}}"
 ></map>
 <!-- 建议后端存储 -->
 <van-steps 

@@ -20,11 +20,16 @@ Page({
     if (e.detail.userInfo) {
       // 允许授权
       app.globalData.userInfo = e.detail.userInfo;
-      console.log(e.detail.userInfo)
+      app.globalData.avatarUrl = e.detail.userInfo.avatarUrl
+      app.globalData.nickName = e.detail.userInfo.nickName
+      console.log(e.detail.userInfo.avatarUrl)
       //插入登录的用户的相关信息到数据库
       let that = this;
       that.insertUserInfo(e);
     }
+    wx.switchTab({
+      url: '/pages/home/home',
+    })
   },
 
   // 获取用户openid

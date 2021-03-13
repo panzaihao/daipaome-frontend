@@ -2,14 +2,14 @@ const app = getApp();
 Page({
   data: {
     time: '',
-    addressIndex: [0, 0],
+    pickupIndex: '',
+    pickupAddr: ['快递站', '邮政快递'],
+    addressIndex: ['', ''],
     addressArray: [
-      ['常用地址', '临时地址'],
+      ['图书馆', '雁南', '雁北', '教学实验综合楼', '学生活动中心', '运动场', '东配楼', '咖啡厅'],
       []
     ],
-    usualAddress: [],
     isUsualAddress: true,
-    mobiles: [],
     imgList: [],
     isUrgent: 1,
     temp: 0,
@@ -27,49 +27,56 @@ Page({
       time: time
     })
 
-    var that = this
-    wx.request({
-      url: 'http://192.168.137.132:8000/getAddressList',
-      method: 'GET',
-      data: {
-        openID: app.globalData.openid,
-      },
-      header: {
-        'content-type': 'application/json' // 默认值
-      },
-      success(res) {
-        console.log(res)
-        var data = res.data.addressList
-        if (res.statusCode == 201) {
-          var addr = [
-            ['常用地址', '临时地址'],
-            []
-          ];
-          var mobiles = [];
-          for (var i = 0; i < data.length; i++) {
-            addr[1][i] = data[i].address;
-            mobiles[i] = data[i].phone;
-          }
-          console.log(addr)
-          that.setData({
-            addressArray: addr,
-            usualAddress: addr[1],
-            mobiles: mobiles
-          })
-        } else {
-          wx.showModel({
-            title: '提示',
-            content: res.errMsg
-          })
-        }
-      }
-    })
+    // var that = this
+    // wx.request({
+    //   url: 'http://192.168.137.132:8000/getAddressList',
+    //   method: 'GET',
+    //   data: {
+    //     openID: app.globalData.openid,
+    //   },
+    //   header: {
+    //     'content-type': 'application/json' // 默认值
+    //   },
+    //   success(res) {
+    //     console.log(res)
+    //     var data = res.data.addressList
+    //     if (res.statusCode == 201) {
+    //       var addr = [
+    //         ['常用地址', '临时地址'],
+    //         []
+    //       ];
+    //       var mobiles = [];
+    //       for (var i = 0; i < data.length; i++) {
+    //         addr[1][i] = data[i].address;
+    //         mobiles[i] = data[i].phone;
+    //       }
+    //       console.log(addr)
+    //       that.setData({
+    //         addressArray: addr,
+    //         usualAddress: addr[1],
+    //         mobiles: mobiles
+    //       })
+    //     } else {
+    //       wx.showModel({
+    //         title: '提示',
+    //         content: res.errMsg
+    //       })
+    //     }
+    //   }
+    // })
   },
 
   bindTimeChange: function (e) {
     console.log('picker发送选择改变，携带值为', e.detail.value)
     this.setData({
       time: e.detail.value
+    })
+  },
+
+  BindPickerChange: function (e) {
+    console.log('picker发送选择改变，携带值为', e.detail.value)
+    this.setData({
+      pickupIndex: e.detail.value
     })
   },
 
@@ -88,11 +95,13 @@ Page({
     };
     data.addressIndex[e.detail.column] = e.detail.value;
     if (e.detail.column == 0) {
-      if (data.addressIndex[0] == 0)
-        data.addressArray[1] = this.data.usualAddress;
-      else if (data.addressIndex[0] == 1)
-        data.addressArray[1] = ['雁南园', '雁北园', '教工食堂', '学生食堂', '学生活动中心', '图书馆', '教学N楼', '教学S楼', '操场'];
-      data.addressIndex[1] = 0;
+      if (data.addressIndex[0] == 1)
+        data.addressArray[1] = ['S2', 'S3', 'S4', 'S5', 'S6'];
+      else if (data.addressIndex[0] == 2)
+        data.addressArray[1] = ['A区', 'B区', 'C区', 'D1区', 'D2区', 'E区'];
+      else 
+        data.addressArray[1] = [''];
+      // data.addressIndex[1] = 0;
     }
     this.setData(data)
     this.setData({
@@ -103,7 +112,7 @@ Page({
   bindChange: function (e) {
     console.log(e)
     this.setData({
-      isUrgent: e.detail.value == 1 ? 1.5 : 1
+      isUrgent: e.detail.value == 1 ? 2 : 1
     })
   },
 
