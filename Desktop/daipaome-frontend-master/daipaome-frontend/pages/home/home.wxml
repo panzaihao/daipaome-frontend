@@ -1,0 +1,75 @@
+<view class="cu-bar search bg-white">
+  <image src="{{avatarUrl}}" class="cu-avatar round"></image>
+  <view class="search-form round">
+    <text class="cuIcon-search"></text>
+    <input type="text" placeholder="请输入搜索关键词" confirm-type="search"></input>
+  </view>
+  <picker bindchange="bindPickerChange" value="{{ index }}" range="{{ array }}">
+    <view class="action">
+      <text>{{ array[index] }}</text>
+      <text class="cuIcon-triangledownfill"></text>
+    </view>
+  </picker>
+</view>
+
+<swiper class="screen-swiper" round-dot circular="true" autoplay="true" interval="5000" duration="500">
+  <swiper-item wx:for="{{ swiperList }}" wx:key>
+    <image src="{{ item.url }}" mode="widthFix"></image>
+  </swiper-item>
+</swiper>
+
+<view class="categoryList">
+  <block wx:for="{{categoryList}}">
+    <view class="category-info">
+      <image src="{{item.src}}" class="category-image" bindtap="navigateToOther" id="{{index}}"></image>
+      <view class="category-text">{{item.name}}</view>
+    </view>
+  </block>
+</view>
+
+<view class="intro">
+  <image src="/images/logo.jpg" mode="widthFix"></image>
+</view>
+
+<van-cell border="{{false}}" title="加急订单" value="更多 >" link-type="navigateTo" url="/pages/takeOrders/takeOrders" />
+<view wx:for="{{objectList}}">
+  <view class="list" wx:if="{{item.isUrgent==1}}">
+    <image class="card" src="/images/kuaidi.png" data-id="{{item.orderID}}" bindtap="toDetail"
+      style="height: 100rpx; width:100rpx" wx:if="{{item.isExpress==1}}" />
+    <image class="card" src="/images/daifan.png" data-id="{{item.orderID}}" bindtap="toDetail"
+      style="height: 100rpx; width:100rpx" wx:if="{{item.isExpress==2}}" />
+    <image class="card" src="/images/chaoshi.png" data-id="{{item.orderID}}" bindtap="toDetail"
+      style="height: 100rpx; width:100rpx" wx:if="{{item.isExpress==3}}" />
+    <image class="card" src="/images/waimai.png" data-id="{{item.orderID}}" bindtap="toDetail"
+      style="height: 100rpx; width:100rpx" wx:if="{{item.isExpress==4}}" />
+    <image class="card" src="/images/qita.png" data-id="{{item.orderID}}" bindtap="toDetail"
+      style="height: 100rpx; width:100rpx" wx:if="{{item.isExpress==5}}" />
+    <view class="cls1 cls2">
+      <view class="list-title" data-id="{{item.orderID}}" bindtap="toDetail">
+        <view>
+          <text wx:if="{{item.isExpress==1}}" style="font-weight:bold;">快递</text>
+          <text wx:if="{{item.isExpress==2}}" style="font-weight:bold;">带饭</text>
+          <text wx:if="{{item.isExpress==3}}" style="font-weight:bold;">超市</text>
+          <text wx:if="{{item.isExpress==4}}" style="font-weight:bold;">外卖</text>
+          <text wx:if="{{item.isExpress==5}}" style="font-weight:bold;">其它</text>
+          <van-tag style="margin-left:5px;" type="danger">现在出发</van-tag>
+        </view>
+        <view style="font-size:12px;color:gray;">{{item.submitDate}}</view>
+      </view>
+      <view bindtap="toDetail" data-id="{{item.orderID}}" style="font-size:13px;color:gray;padding-left:10px;">
+        {{item.description}}
+      </view>
+      <view class="list-title">
+        <view bindtap="toDetail" data-id="{{item.orderID}}" style="color:red;padding-top:5px;">
+          ￥{{item.money}}
+        </view>
+        <view>
+          <van-button bindtap="bindTap" data-id="{{item.orderID}}" color="#4A90E2" size="small">接单</van-button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<van-divider hairline="{{true}}" contentPosition="center">代跑么</van-divider>
+

@@ -1,0 +1,34 @@
+<van-cell-group border="{{ false }}">
+  <van-cell title="订单编号" value="{{ orderInfo.orderID }}" />
+  <van-cell title="赏金" value="￥{{ orderInfo.money }}" value-class="color" />
+  <van-cell value="{{ orderInfo.time }}">
+    <view slot="title">
+      <view class="van-cell-text">
+        <text space="nbsp">配送时间 </text>
+        <van-tag type="danger" wx:if="{{ orderInfo.isUrgent == true }}">今天出发</van-tag>
+      </view>
+    </view>
+  </van-cell>
+
+  <view class="cu-timeline" style="margin: 10px 0;">
+    <text space="nbsp" style="margin-left: 3%; color: #888;">{{ orderInfo.name }} {{ orderInfo.mobile }}</text>
+    <view class="cu-item cur cuIcon-location">
+      <view class="content  shadow-blur">
+        <text>【取件】</text> {{ orderInfo.pickupAddress }}
+      </view>
+    </view>
+    <view class="cu-item cuIcon-location">
+      <view class="content  shadow-blur">
+        <text>【配送】</text> {{ orderInfo.consigneeAddress }}
+      </view>
+    </view>
+    <view class="padding flex flex-direction">
+      <button class="cu-btn bg-red lg">订单地图</button>
+    </view>
+  </view>
+
+  <van-cell title="物品描述" value="{{ orderInfo.description }}" />
+  <van-cell title="类型" value="{{ orderInfo.isExpress == 1? '快递' : '非快递' }}" />
+
+  <van-button color="#4A90E2" size="large" class="btn">接单</van-button>
+</van-cell-group>

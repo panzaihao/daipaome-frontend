@@ -1,0 +1,19 @@
+<!--pages/usercenter/usercenter.wxml-->
+<!--pages/set/set.wxml-->
+<mp-cells>
+  <mp-cell id="avatar" title="头像：" hover="true" bindtap="changeAvatar">
+    <image wx:if="{{getIt}}" class="userinfo-avatar" src="{{avatar}}" mode="cover"></image>
+  </mp-cell>
+  <mp-cell id="nickname" title="昵称: " link hover="true" bindtap="setting">
+    <text style="margin:12px">{{nickname}}</text>
+  </mp-cell>
+  <mp-cell id="sex" title="性别：" link hover="true" bindtap="setting">
+    <text>{{sex}}</text>
+  </mp-cell>
+  <mp-cell id="phone" title="手机号：" link hover="true" bindtap="setting">
+    <text>{{phone}}</text>
+  </mp-cell>
+  <mp-cell title="订单管理" hover="true" link url="../order/order"></mp-cell>
+  <mp-cell title="常用地址设置" hover="true" link url="../setAddr/setAddr"></mp-cell>
+  <mp-cell title="密码设置" hover="true" link url="../setPwd/setPwd"></mp-cell>
+</mp-cells>

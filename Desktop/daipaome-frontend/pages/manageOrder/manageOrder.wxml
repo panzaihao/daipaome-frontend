@@ -1,0 +1,78 @@
+<!--pages/manageOrder/manageOrder.wxml-->
+<van-tabs animated="true" swipeable="true" bind:change="manageOrder">
+  <van-tab title="全部订单">
+    <mp-cells>
+      <mp-cell wx:for="{{order}}" id="{{index}}" link hover="true" bindtap="order">
+        <view style="font-size:14px;margin-bottom:8px">
+          <text>派件人: {{item.name}}</text>
+          <text style="margin-left:45vw">{{item.date}}</text>
+        </view>
+        <view style="font-size:14px">
+          <text>联系方式: {{item.mobile}}</text>
+          <text style="margin-left:25vw" class="done {{item.status == 610002}}">{{item.status}}</text>
+        </view>
+      </mp-cell>
+    </mp-cells>
+  </van-tab>
+  <van-tab title="待付款" dot="{{unpayOrder !== null}}">
+    <mp-cells>
+      <mp-cell wx:for="{{unpayOrder}}" id="{{item.orderID}}" link hover="true" bindtap="order">
+        <view style="font-size:14px;margin-bottom:8px">
+          <text>派件人: {{item.name}}</text>
+          <text style="margin-left:45vw">{{item.date}}</text>
+        </view>
+        <view style="font-size:14px">
+          <text>联系方式: {{item.mobile}}</text>
+          <text style="margin-left:25vw" class="done {{item.status == 610002}}">{{item.status}}</text>
+        </view>
+      </mp-cell>
+    </mp-cells>
+  </van-tab>
+  <van-tab title="待收货">
+    <mp-cells>
+      <mp-cell wx:for="{{nowOrder}}" id="{{item.orderID}}" link hover="true" bindtap="order">
+        <view style="font-size:14px;margin-bottom:8px">
+          <text>派件人: {{item.name}}</text>
+          <text style="margin-left:45vw">{{item.date}}</text>
+        </view>
+        <view style="font-size:14px">
+          <text>联系方式: {{item.mobile}}</text>
+          <text style="margin-left:25vw" class="done {{item.status == 610002}}">{{item.status}}</text>
+        </view>
+      </mp-cell>
+    </mp-cells>
+  </van-tab>
+  <van-tab title="已完成">
+  <mp-cells>
+    <mp-cell wx:for="{{historyOrder}}" id="{{item.orderID}}" link hover="true" bindtap="order">
+      <view style="font-size:14px;margin-bottom:8px">
+          <text>派件人: {{item.name}}</text>
+          <text style="margin-left:45vw">{{item.date}}</text>
+        </view>
+        <view style="font-size:14px">
+          <text>联系方式: {{item.mobile}}</text>
+          <text style="margin-left:25vw" class="done {{item.status == 610002}}">{{item.status}}</text>
+        </view>
+    </mp-cell>
+  </mp-cells>
+  </van-tab>
+  <van-tab title="已取消">
+    <mp-cells>
+      <mp-cell wx:for="{{cancelOrder}}" id="{{item.orderID}}" link hover="true" bindtap="order">
+        <view style="font-size:14px;margin-bottom:8px">
+          <text>派件人: {{item.name}}</text>
+          <text style="margin-left:45vw">{{item.date}}</text>
+        </view>
+        <view style="font-size:14px">
+          <text>联系方式: {{item.mobile}}</text>
+          <text style="margin-left:25vw" class="done {{item.status == 610002}}">{{item.status}}</text>
+        </view>
+      </mp-cell>
+    </mp-cells>
+  </van-tab>
+</van-tabs>
+
+
+<mp-cells wx:if="{{order === 1}}">
+  <mp-cell wx:for="{{myList}}" wx:key="id" link hover="true" bindtap="order"></mp-cell>
+</mp-cells>

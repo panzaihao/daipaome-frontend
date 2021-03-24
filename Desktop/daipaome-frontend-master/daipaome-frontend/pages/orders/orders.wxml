@@ -1,0 +1,39 @@
+<!--pages/orders/orders.wxml-->
+<view>订单配送实况：</view>
+<map
+  class="map"
+  longitude="{{longtitude}}"
+  latitude="{{latitude}}"
+  scale="15"
+  min-scales="13"
+  max-scales="20"
+  bindtap="getLocaltion"
+  markers="{{markers}}"
+  wx:if="{{showmap}}"
+></map>
+<!-- 建议后端存储 -->
+<van-steps 
+    steps="{{steps}}" 
+    direction="vertical"
+    active-color="#4A90E2"
+/>
+<van-cell-group border="{{false}}">
+  <!-- 预期：派件人信息 -->
+  <van-cell icon="certificate" title="订单编号：" value="{{orderID}}" />
+  <van-cell icon="orders-o" title="物品类型" value="{{orderType}}"/>
+  <van-cell icon="user-circle-o" title="收件人：" value="{{orderInfo.name}}"></van-cell>
+  <van-cell icon="balance-o" title="赏金" value="￥{{orderInfo.money}}" value-class="color" />
+  <van-cell icon="clock-o" value="{{orderInfo.time}}">
+    <view slot="title">
+      <view class="van-cell-text">
+        <text space="nbsp">预期配送时间 </text>
+        <van-tag type="danger" wx:if="{{orderInfo.isUrgent==1}}">{{item.time}}</van-tag>
+      </view>
+    </view>
+  </van-cell>
+
+  <van-cell icon="edit" title="物品描述" value="{{orderInfo.description}}" />
+  <!-- 考虑放进JS当中处理 -->
+
+  <button wx:if="{{ status === 310001}}" bindtap="receipt">确认收货</button>
+</van-cell-group>
