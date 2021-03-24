@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "我要发布",
-  "component": true,
-  "usingComponents": {
-    "van-cell": "/miniprogram_npm/@vant/weapp/cell/index",
-    "van-cell-group": "/miniprogram_npm/@vant/weapp/cell-group/index"
-  }
-}

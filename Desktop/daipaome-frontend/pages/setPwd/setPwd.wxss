@@ -1,6 +1,0 @@
-/* pages/setPwd/setPwd.wxss */
-.tip{
-  font-size: 12px;
-  color:red;
-  margin-left: 16px
-}
