@@ -27,9 +27,6 @@ Page({
       let that = this;
       that.insertUserInfo(e);
     }
-    wx.switchTab({
-      url: '/pages/home/home',
-    })
   },
 
   // 获取用户openid
@@ -43,7 +40,7 @@ Page({
         app.globalData.openid = res.result.openid
         // 查看是否授权
         wx.request({
-          url: 'http://' + app.globalData.backend_server + '/addAddr',
+          url: 'http://' + app.globalData.backend_server + '/checkAuthorized',
           data: {
             openID: res.result.openid
           },
@@ -52,7 +49,9 @@ Page({
           },
           success(res) {
             console.log(res)
-            if (res.isAuthorized == 1) {
+            if (res.data.isAuthorized == 1) {
+              app.globalData.avatarUrl = res.data.avatarUrl
+              app.globalData.nickName = res.data.nickName
               wx.switchTab({
                 url: '/pages/home/home',
               })
@@ -75,11 +74,13 @@ Page({
     var openid = ''
     var nickname = rawData.nickName
     var sex = rawData.gender
+    var avatarUrl = rawData.avatarUrl
 
     var data = {
       openID: app.globalData.openid,
       nickname,
       sex,
+      avatarUrl // add
     };
 
     util.request(api.AuthLogin, data, "POST").then(function (res) {
