@@ -7,32 +7,14 @@ Page({
    * 页面的初始数据
    */
   data: {
-    // order:null,
-    // tabs: [],
-    // status: '',
-    // nowOrder: null,
-    // historyOrder: null,
-    // cancelOrder: null,
-    // unpayOrder:null,
-    // takeList: []
     orderInfo:null,
-    order: [
-      {orderID: 10212012003, name: '李四', phone: '13335784245', status: '正在派送',date: '2021-2-20'},
-      {orderID: 10212012004, name: '张三', phone: '13707577576', status: '订单已接',date: '2021-2-19'},
-      {orderID: 10212012000, name: '李四', phone: '13335784245', status: '待付款',date: '2021-2-18'},
-      {orderID: 10212012001, name: '张三', phone: '13707577576', status: '已完成',date: '2021-2-17'}
-    ],
+    order: null,
     tabs: [],
     status: '',
-    nowOrder: [
-      {orderID: 10212012003, name: '李四', phone: '13335784245', status: '正在派送',date: '2021-2-20'},
-      {orderID: 10212012004, name: '张三', phone: '13707577576', status: '订单已接',date: '2021-2-19'}
-    ],
-    historyOrder: [
-      {orderID: 10212012001, name: '张三', phone: '13707577576', status: '已完成',date: '2021-2-17'}
-    ],
+    nowOrder: null,
+    historyOrder: null,
     cancelOrder: null,
-    unpayOrder: [{orderID: 10212012000, name: '李四', phone: '13335784245', status: '待付款',date: '2021-2-18'}],
+    unpayOrder: null,
     takeList: []
   },
   onLoad(){

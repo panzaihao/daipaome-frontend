@@ -25,58 +25,47 @@ Page({
     orderInfo: {},
     orderType: '',
     stepLength: 0,
-    latitude: 40.1573537832472,
-    longtitude: 116.28892183920092,
+    latitude: null,
+    longtitude: null,
     markers: [
       { 
         id: 1, 
-        latitude: 40.157387147930926,
-        longitude: 116.28405385353813,
+        latitude: null,
+        longitude: null,
         iconPath: '/images/location.png',
         callout: { content: '出发地址', display: 'ALWAYS', borderRadius: 10, borderWidth: 3, bgColor: '#4A90E2' } 
       }, { 
         id: 2, 
-        latitude: 40.15899172313033, 
-        longitude: 116.29383140708387, 
+        latitude: null, 
+        longitude: null, 
         iconPath: '/images/location.png',
         callout: { content: '配送地址', display: 'ALWAYS', borderRadius: 10, borderWidth: 3, bgColor: '#4A90E2' } 
       }
     ],
-    showmap: false,
-    originAddress :null,
-    endAddress :null
+    showMap: false
   },
   onLoad: function(){
-    const eventChannel = this.getOpenerEventChannel()
-    var that = this
-    var id = 1
-    var originAddress = null
-    var endAddress = null
-    eventChannel.on('acceptDataFromOpenerPage', function(data) {
-      id = data.orderID,
-      originAddress = data.originAddress,
-      endAddress= data.endAddress
-
-    })
-    this.setData({
-      orderID: id,
-      originAddress:originAddress,
-      endAddress:endAddress
-    })
-    console.log(id,originAddress,endAddress)
     qqmapsdk = new QQMapWX({
       key: 'W3EBZ-6ZYKP-ZYFDB-LOJST-OKW53-ZXFCZ'
     })
-    this.request()
+    const eventChannel = this.getOpenerEventChannel()
+    var that = this
+    var id = 1
+    eventChannel.on('acceptDataFromOpenerPage', function(data) {
+      id = data.orderID
+    })
+    this.setData({
+      orderID: id
+    })
   },
   // 在onLoad 函数执行后才开始执行
   onShow: function(){
-    this.getLocalInfo()
+    this.request()
   },
   request: function(){
     var that=this
     wx.request({
-      url: 'http://192.168.137.132:8000/getOrderInfo',
+      url: 'http://' + app.globalData.backend_server + '/getOrderInfo',
       method: 'GET',
       data: { 
         orderID: that.data.orderID,
@@ -90,8 +79,10 @@ Page({
           that.setData({
             orderInfo: orderInfo,
             orderType: orderType[(orderInfo.isExpress) - 1],
-            //stepLength: orderInfo.steps.length
+            stepLength: orderInfo.steps.length
           })
+          that.getLocalInfo()
+          console.log(that.data.orderInfo)
         } else {
           wx.showToast({
             title: '服务器异常',
@@ -112,30 +103,35 @@ Page({
   getLocalInfo: function(){
     var that = this
     var markers = this.data.markers
-    var url= 'http://' + app.globalData.backend_server + '/locationInfo'
-
+    console.log(this.data.orderInfo)
     wx.request({
-      url: url,
+      url: 'http://' + app.globalData.backend_server + '/locationInfo',
       method: 'GET',
       data: {
-        originAddress: that.data.originAddress,
-        endAddress: that.data.endAddress
+        originAddress: that.data.orderInfo.pickupAddress,
+        endAddress: that.data.orderInfo.consigneeAddress
       },
       success(res){
         console.log(res)
-        console.log("aaa")
+        var longitude = null
+        var latitude = null
         if(res.statusCode.toString()[0] === '2'){
           // 改变坐标位置
-          
-          markers[0].latitude = parseFloat(res.originLatitude);
-          markers[0].longitude = parseFloat(res.longtitude);
-          markers[1].latitude = parseFloat(res.endLatitude);
-          markers[1].longitude = parseFloat(res.endLongtitude);
+          markers[0].latitude = res.originLatitude;
+          markers[0].longitude = res.originLongtitude;
+          markers[1].latitude = res.endLatitude
+          markers[1].longitude = res.endLongtitude
+          latitude = markers[0].latitude + markers[1].latitude
+          longitude = markers[0].longitude + markers[1].longitude
           that.setData({
             markers: markers,
-            latitude: (res.originLatitude + res.endLatitude) / 2 ,
-            longtitude: (res.originLongtitude + res.endLongtitude) / 2 ,
-            showmap:true
+            latitude: latitude,
+            longtitude: longitude,
+          })
+          console.log(that.data.markers)
+          // 为了等到初始化地图经纬之后才开始渲染地图
+          that.setData({
+            showMap: true
           })
           qqmapsdk.direction({
             mode: 'walking',
@@ -167,7 +163,6 @@ Page({
   
   onReady: function (options) {
     
-   
   },
   
   receipt: function(e){
@@ -211,7 +206,7 @@ Page({
     var steps = this.data.steps
     if(this.data.stepLength !== steps.length){
       wx.request({
-        url: 'http://localhost:8000/uploadSteps ',
+        url: 'http://' + app.globalData.backend_server + '/uploadSteps ',
         method: 'POST',
         data:{
           orderID: that.data.orderID,

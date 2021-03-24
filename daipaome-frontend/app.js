@@ -43,6 +43,6 @@ App({
     nickName: '',
     user: {},
     imService: null,
-    backend_server: '192.168.137.132:8000',
+    backend_server: '49.232.162.117:8000',
   },
 });

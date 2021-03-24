@@ -8,7 +8,7 @@ Page({
   onLoad: function (options) {
     var that=this
     wx.request({
-      url: 'http://192.168.137.132:8000/getAddrInfo',
+      url: 'http://' + app.globalData.backend_server + '/getAddrInfo',
       method: 'GET',
       data: {
         openid: app.globalData.openid,
@@ -49,7 +49,7 @@ Page({
     var delAddrInfo = this.data.addressList[index]
     console.log(index)
     wx.request({
-      url: 'http://192.168.137.132:8000/delAddr',
+      url: 'http://' + app.globalData.backend_server + '/delAddr',
       method: 'POST',
       data: {
         openid: app.globalData.openid,

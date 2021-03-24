@@ -102,7 +102,7 @@ Page({
     console.log(this.data.avatarUrl)
     var that = this
     wx.request({
-      url: 'http://192.168.137.132:8000/getObjectInfo',
+      url: 'http://' + app.globalData.backend_server + '/getObjectInfo',
       method: 'GET',
       data: {
         openID: app.globalData.openid,
@@ -253,7 +253,7 @@ Page({
       success(res) {
         if (res.confirm) {
           wx.request({
-            url: 'http://192.168.137.132:8000/giveOrderInfo',
+            url: 'http://' + app.globalData.backend_server + '/giveOrderInfo',
             method: 'POST',
             data: {
               openID: app.globalData.openid,
@@ -309,7 +309,7 @@ Page({
     console.log(orderID)
     let that = this
     wx.request({
-      url: 'http://192.168.137.132:8000/getInfoByOrderID',
+      url: 'http://' + app.globalData.backend_server + '/getInfoByOrderID',
       method: 'GET',
       data: {
         openID: app.globalData.openid,

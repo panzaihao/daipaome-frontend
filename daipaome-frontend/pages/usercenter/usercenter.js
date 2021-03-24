@@ -16,7 +16,7 @@ Page({
     sex: '',
     gender: null,
     phone: '13707577090',
-    
+    getIt: false
   },
 
   /**
@@ -24,49 +24,8 @@ Page({
    */
   onLoad: function (options) {
     let that = this
-    // 获取个人信息，目前使用微信原生接口,后期使用自己设定的接口
-    if (app.globalData.userInfo) {
-      console.log(app.globalData.userInfo)
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      })
-    } else if (this.data.canIUse){
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        console.log(res.userInfo)
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true,
-          nickname: res.userInfo.nickName,
-          gender: res.userInfo.gender,
-          avatar: res.userInfo.avatarUrl
-        })
-        if(this.data.gender == 1){
-          this.setData({
-            sex: '男'
-          })
-        } else{
-          this.setData({
-            sex: '女'
-          })
-        }
-      }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
-          })
-        }
-      })
-    }
     wx.request({
-      url: 'http://'+app.globalData.backend_server+'/userInfo',
+      url: 'http://'+ app.globalData.backend_server +'/userInfo',
       method: 'GET',
       data: {
         openid: app.globalData.openid,
@@ -77,17 +36,53 @@ Page({
       success(res){
         console.log(res)
         var data = res.data
-        if(res.statusCode == 201){
+        if(res.statusCode.toString()[0] === '2'){
           that.setData({
             nickname: app.globalData.nickname,
             sex: app.globalData.sex,
-            avatar: 'http://'+app.globalData.backend_server+data.avatar,
-            phone: data.phone
+            avatar: 'http://'+ app.globalData.backend_server + data.avatar,
+            phone: data.phone,
+            getIt: true
           })
         } else {
-          wx.showModal({
-            title: '提示',
-            content: res.errMsg
+          
+        }
+      },
+      fail(err){
+        // 获取个人信息，后端调取失败时使用微信原生接口
+        if (app.globalData.userInfo) {
+          console.log(app.globalData.userInfo)
+          that.setData({
+            userInfo: app.globalData.userInfo,
+            hasUserInfo: true
+          })
+        } else if (that.data.canIUse){
+          // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
+          // 所以此处加入 callback 以防止这种情况
+          app.userInfoReadyCallback = res => {
+            console.log(res.userInfo)
+            that.setData({
+              userInfo: res.userInfo,
+              hasUserInfo: true,
+              nickname: res.userInfo.nickName,
+              avatar: res.userInfo.avatarUrl,
+              getIt: true
+            })
+            var sex = res.userInfo.gender === 1 ? '男' : '女'
+            that.setData({
+              sex: sex
+            })
+          }
+        } else {
+          // 在没有 open-type=getUserInfo 版本的兼容处理
+          wx.getUserInfo({
+            success: res => {
+              app.globalData.userInfo = res.userInfo
+              this.setData({
+                userInfo: res.userInfo,
+                hasUserInfo: true
+              })
+            }
           })
         }
       }

@@ -150,7 +150,7 @@ Page({
           wx.uploadFile({
             filePath: res.tempFilePaths[i],
             name: 'file',
-            url: 'http://192.168.137.132:8000//uploadImages',
+            url: 'http://' + app.globalData.backend_server + '/uploadImages',
             formData: {
               openID: app.globalData.openid
             },
@@ -197,7 +197,7 @@ Page({
       fileList: this.data.fileList
     }
     wx.request({
-      url: 'http://192.168.137.132:8000/releaseOrders',
+      url: 'http://' + app.globalData.backend_server + '/releaseOrders',
       method: 'POST',
       data: {
         expressInfo: expressInfo
