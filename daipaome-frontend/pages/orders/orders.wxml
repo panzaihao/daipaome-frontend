@@ -2,14 +2,14 @@
 <view>订单配送实况：</view>
 <map
   class="map"
-  longitude="{{longtitude}}"
+  longitude="{{longitude}}"
   latitude="{{latitude}}"
   scale="15"
   min-scales="13"
   max-scales="20"
   bindtap="getLocaltion"
   markers="{{markers}}"
-  wx:if="{{showmap}}"
+  wx:if="{{showMap}}"
 ></map>
 <!-- 建议后端存储 -->
 <van-steps 

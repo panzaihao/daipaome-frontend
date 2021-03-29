@@ -258,11 +258,12 @@ Page({
             data: {
               openID: app.globalData.openid,
               orderID: orderID,
-              status: 1 // 1表示已接单
+              status: 210001 // 1表示已接单
             },
             header: {
               'content-type': 'application/json' // 默认值
             },
+            // 这部分还有逻辑漏洞，待处理
             success(res) {
               console.log(res)
               that.onLoad()

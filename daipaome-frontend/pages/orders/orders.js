@@ -1,32 +1,16 @@
 const app = getApp()
 var QQMapWX = require('../../pages/orders/qqmap-wx-jssdk');
+const formatTime = require('../../utils/formatTime.js')
 var qqmapsdk
 Page({
   data: {
     orderID: '',
-    steps: [
-      {
-        text: '您已经于图书馆确认查收',
-        desc: '2021-2-19 17:30',
-      },
-      {
-        text: '您的订单现在正在派送',
-        desc: '2021-2-19 17:15',
-      },
-      {
-        text: '您的订单已接，接单人：张三，联系方式：13707577090',
-        desc: '2021-2-19 17:10',
-      },
-      {
-        text: '派单成功！',
-        desc: '2021-2-19 17:00',
-      }
-    ],
+    steps: null,
     orderInfo: {},
     orderType: '',
     stepLength: 0,
     latitude: null,
-    longtitude: null,
+    longitude: null,
     markers: [
       { 
         id: 1, 
@@ -65,7 +49,7 @@ Page({
   request: function(){
     var that=this
     wx.request({
-      url: 'http://' + app.globalData.backend_server + '/getOrderInfo',
+      url: 'http://' + app.globalData.backend_server + '/orderDetail',
       method: 'GET',
       data: { 
         orderID: that.data.orderID,
@@ -79,7 +63,8 @@ Page({
           that.setData({
             orderInfo: orderInfo,
             orderType: orderType[(orderInfo.isExpress) - 1],
-            stepLength: orderInfo.steps.length
+            steps: orderInfo.Steps,
+            stepLength: orderInfo.Steps.length
           })
           that.getLocalInfo()
           console.log(that.data.orderInfo)
@@ -117,33 +102,34 @@ Page({
         var latitude = null
         if(res.statusCode.toString()[0] === '2'){
           // 改变坐标位置
-          markers[0].latitude = res.originLatitude;
-          markers[0].longitude = res.originLongtitude;
-          markers[1].latitude = res.endLatitude
-          markers[1].longitude = res.endLongtitude
-          latitude = markers[0].latitude + markers[1].latitude
-          longitude = markers[0].longitude + markers[1].longitude
+          markers[0].latitude = res.data.originLatitude;
+          markers[0].longitude = res.data.originLongitude;
+          markers[1].latitude = res.data.endLatitude
+          markers[1].longitude = res.data.endLongitude
+          latitude = (parseFloat(markers[0].latitude) + parseFloat(markers[1].latitude)) / 2
+          longitude = (parseFloat(markers[0].longitude) + parseFloat(markers[1].longitude)) / 2
           that.setData({
             markers: markers,
             latitude: latitude,
-            longtitude: longitude,
+            longitude: longitude,
           })
-          console.log(that.data.markers)
           // 为了等到初始化地图经纬之后才开始渲染地图
           that.setData({
             showMap: true
           })
+          console.log(that.data.latitude,that.data.longitude)
           qqmapsdk.direction({
             mode: 'walking',
             form: {
-              latitude: that.data.startLatitude,
-              longitude: that.data.startLongtitude
+              latitude: that.data.markers[0].latitude,
+              longitude: that.data.markers[0].longitude
             },
             to: {
-              latitude: that.data.endLatitude,
-              longitude: that.data.endLongtitude
+              latitude: that.data.markers[1].latitude,
+              longitude: that.data.markers[1].longitude
             },
             success: function(response){
+              // 这部分的数据可以使用了！
               console.log(response)
             }
           })
@@ -162,7 +148,8 @@ Page({
   },
   
   onReady: function (options) {
-    
+    var time = formatTime.formatTime(new Date())
+    console.log(time)
   },
   
   receipt: function(e){
@@ -204,6 +191,7 @@ Page({
     // 检测状态是否有改变，如果没有，不care
     var that = this
     var steps = this.data.steps
+    console.log(this.data.stepLength)
     if(this.data.stepLength !== steps.length){
       wx.request({
         url: 'http://' + app.globalData.backend_server + '/uploadSteps ',

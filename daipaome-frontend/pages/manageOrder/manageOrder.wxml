@@ -16,7 +16,7 @@
   </van-tab>
   <van-tab title="待付款" dot="{{unpayOrder !== null}}">
     <mp-cells>
-      <mp-cell wx:for="{{unpayOrder}}" id="{{item.orderID}}" link hover="true" bindtap="order">
+      <mp-cell wx:for="{{unpayOrder}}" id="{{index}}" link hover="true" bindtap="order">
         <view style="font-size:14px;margin-bottom:8px">
           <text>派件人: {{item.name}}</text>
           <text style="margin-left:45vw">{{item.date}}</text>
@@ -30,7 +30,7 @@
   </van-tab>
   <van-tab title="待收货">
     <mp-cells>
-      <mp-cell wx:for="{{nowOrder}}" id="{{item.orderID}}" link hover="true" bindtap="order">
+      <mp-cell wx:for="{{nowOrder}}" id="{{index}}" link hover="true" bindtap="order">
         <view style="font-size:14px;margin-bottom:8px">
           <text>派件人: {{item.name}}</text>
           <text style="margin-left:45vw">{{item.date}}</text>
@@ -44,7 +44,7 @@
   </van-tab>
   <van-tab title="已完成">
   <mp-cells>
-    <mp-cell wx:for="{{historyOrder}}" id="{{item.orderID}}" link hover="true" bindtap="order">
+    <mp-cell wx:for="{{historyOrder}}" id="{{index}}" link hover="true" bindtap="order">
       <view style="font-size:14px;margin-bottom:8px">
           <text>派件人: {{item.name}}</text>
           <text style="margin-left:45vw">{{item.date}}</text>
@@ -58,7 +58,7 @@
   </van-tab>
   <van-tab title="已取消">
     <mp-cells>
-      <mp-cell wx:for="{{cancelOrder}}" id="{{item.orderID}}" link hover="true" bindtap="order">
+      <mp-cell wx:for="{{cancelOrder}}" id="{{index}}" link hover="true" bindtap="order">
         <view style="font-size:14px;margin-bottom:8px">
           <text>派件人: {{item.name}}</text>
           <text style="margin-left:45vw">{{item.date}}</text>

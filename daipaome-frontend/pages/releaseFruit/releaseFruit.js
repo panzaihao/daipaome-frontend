@@ -1,4 +1,5 @@
 const app = getApp();
+const formatTime = require('../../utils/formatTime.js')
 Page({
   data: {
     time: '',
@@ -207,18 +208,34 @@ Page({
       },
       success(res) {
         console.log(res)
-        wx.showToast({
-          title: '发布成功',
-          icon: 'success',
-          duration: 2000,
-          success: function () {
-            setTimeout(function () {
-              wx.reLaunch({
-                url: '/pages/home/home',
-              })
-            }, 1000);
-          }
-        })
+        if(res.statusCode.toString()[0] === '2'){
+          var orderID = res.data.orderID
+          var steps = { text: '派单成功！', desc: '' }
+          steps.desc = formatTime.formatTime(new Date())
+          wx.request({
+            url: 'http://' + app.globalData.backend_server + '/uploadSteps ',
+            method: 'POST',
+            data:{
+              orderID: orderID,
+              steps: steps
+            },
+            success(res){
+              console.log(res)
+            }
+          })
+          wx.showToast({
+            title: '发布成功',
+            icon: 'success',
+            duration: 2000,
+            success: function () {
+              setTimeout(function () {
+                wx.reLaunch({
+                  url: '/pages/home/home',
+                })
+              }, 1000);
+            }
+          })
+        }
       }
     })
   }

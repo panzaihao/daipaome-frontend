@@ -16,7 +16,21 @@ Page({
     sex: '',
     gender: null,
     phone: '13707577090',
-    getIt: false
+    getIt: true,
+    categoryList: [{
+      name: "我要接单",
+      src: "/images/take.png",
+    }, {
+      name: "我要发布",
+      src: "/images/release.png",
+    }, {
+      name: "订单管理",
+      src: "/images/manage.png",
+    }, {
+      name: "社区动态",
+      src: "/images/chat.png",
+    }],
+    getInfo: true
   },
 
   /**
@@ -24,6 +38,7 @@ Page({
    */
   onLoad: function (options) {
     let that = this
+    console.log()
     wx.request({
       url: 'http://'+ app.globalData.backend_server +'/userInfo',
       method: 'GET',
@@ -35,41 +50,45 @@ Page({
       },
       success(res){
         console.log(res)
+        console.log(app.globalData)
         var data = res.data
+        // 头像显示不了
         if(res.statusCode.toString()[0] === '2'){
           that.setData({
-            nickname: app.globalData.nickname,
+            nickname: app.globalData.nickName,
             sex: app.globalData.sex,
-            avatar: 'http://'+ app.globalData.backend_server + data.avatar,
+            avatar: app.globalData.user.uuid,
             phone: data.phone,
-            getIt: true
+            getIt: false
           })
-        } else {
-          
+          console.log(that.data.getIt)
         }
       },
       fail(err){
         // 获取个人信息，后端调取失败时使用微信原生接口
         if (app.globalData.userInfo) {
           console.log(app.globalData.userInfo)
+          var sex = app.globalData.userInfo.gender === 1 ? '男' : '女'
           that.setData({
             userInfo: app.globalData.userInfo,
-            hasUserInfo: true
+            hasUserInfo: true,
+            nickname: app.globalData.userInfo.nickName,
+            avatar: app.globalData.userInfo.avatarUrl,
+            getIt: false,
+            sex: sex
           })
         } else if (that.data.canIUse){
           // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
           // 所以此处加入 callback 以防止这种情况
           app.userInfoReadyCallback = res => {
             console.log(res.userInfo)
+            var sex = res.userInfo.gender === 1 ? '男' : '女'
             that.setData({
               userInfo: res.userInfo,
               hasUserInfo: true,
               nickname: res.userInfo.nickName,
               avatar: res.userInfo.avatarUrl,
-              getIt: true
-            })
-            var sex = res.userInfo.gender === 1 ? '男' : '女'
-            that.setData({
+              getIt: false,
               sex: sex
             })
           }
@@ -88,31 +107,10 @@ Page({
       }
     })
   },
-  // 基本信息修改
-  setting: function(e){
-    console.log(e)
-    var setting = 0;
-    var nickname = this.data.nickname
-    var phone = this.data.phone
-    var sex = this.data.sex
-    switch(e.currentTarget.id){
-      case "nickname" :
-        setting = 2
-        break;
-      case "sex" :
-        setting = 3
-        break;
-      case "phone" :
-        setting = 4
-        break;
-    }
-    var userData = {nickname,sex,phone}
-    wx.navigateTo({
-      url: '../set/set',
-      success: function(res){
-        res.eventChannel.emit('acceptDataFromOpenerPage', { setting: setting , data: userData})
-      }
-    })
+  onReady: function(){
+    this.setData({
+      getInfo: false,
+    });
   },
   //  头像更改
   changeAvatar: function(){
