@@ -1,0 +1,19 @@
+@import "weui.wxss";
+@import "colorui/main.wxss";
+@import "colorui/icon.wxss";
+@import "components/GoEasyRecorder/goEasyRecorder.wxss";
+@import "components/GoEasyAudioPlayer/goEasyAudioPlayer.wxss";
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+}
+
+page {
+  background-color: white;
+}

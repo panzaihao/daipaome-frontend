@@ -1,0 +1,4 @@
+<form bindsubmit="saveNickname">
+  <van-field name="nickname" value="{{nickname}}" label="昵称" maxlength="20" type="textarea" placeholder="不要超过20位嗷" autosize border="{{false}}" />
+  <button form-type="submit" type="primary" style="margin-left:80vw;background-color:#4A90E2;" size="mini">保存</button>
+</form>

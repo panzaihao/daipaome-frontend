@@ -1,0 +1,9 @@
+.color {
+  color: #4a90e2;
+}
+
+.btn {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+}

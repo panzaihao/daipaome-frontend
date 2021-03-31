@@ -1,0 +1,17 @@
+.content {
+  text-align: center;
+  font-size: 16px;
+}
+
+.avatar {
+  height: 90px;
+  width: 90px;
+  margin: 10% auto 5%;
+  display: flex;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.gap {
+  margin-top: 20px;
+}
