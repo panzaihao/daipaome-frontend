@@ -1,0 +1,14 @@
+<van-cell-group title="个人信息">
+  <van-cell title="头像">
+    <image src="{{avatarUrl}}" mode="widthFix" class="avatar"></image>
+  </van-cell>
+  <van-cell title="昵称" is-link link-type="navigateTo" url="/pages/changeNickname/changeNickname" value="{{nickName}}" />
+  <picker bindchange="changeSex" value="{{sexIndex}}" range="{{sex}}">
+    <van-cell is-link title="性别"> {{sex[sexIndex]}}</van-cell>
+  </picker>
+</van-cell-group>
+
+<van-cell-group title="学院信息">
+  <van-cell title="学校" is-link value="北京邮电大学" />
+  <van-cell title="学院" is-link value="计算机学院" />
+</van-cell-group>

@@ -36,49 +36,7 @@ Page({
       name: "社区动态",
       src: "/images/chat.png",
     }],
-    objectList: [{
-        isExpress: '1',
-        money: '2.00',
-        description: '哈哈哈哈',
-        time: '今天出发',
-        orderID: '537',
-        isUrgent: '1',
-        submitDate: '2021-02-16 21:05:00'
-      }, {
-        isExpress: '2',
-        money: '2.00',
-        description: '哈哈哈哈',
-        time: '今天出发',
-        orderID: '538',
-        isUrgent: '1',
-        submitDate: '2021-02-16 21:15:00'
-      },
-      {
-        isExpress: '3',
-        money: '2.00',
-        description: '哈哈哈哈',
-        time: '今天出发',
-        orderID: '539',
-        isUrgent: '1',
-        submitDate: '2021-02-15 21:05:00'
-      }, {
-        isExpress: '4',
-        money: '2.00',
-        description: '哈哈哈哈',
-        time: '今天出发',
-        orderID: '540',
-        isUrgent: '1',
-        submitDate: '2021-02-17 16:05:00'
-      }, {
-        isExpress: '5',
-        money: '2.00',
-        description: '哈哈哈哈',
-        time: '17:00',
-        orderID: '538',
-        isUrgent: '0',
-        submitDate: '2021-02-17 21:05:00'
-      }
-    ],
+    objectList: [],
     avatarUrl: ''
   },
 
@@ -235,16 +193,17 @@ Page({
   toDetail: function (e) {
     console.log(e)
     wx.navigateTo({
-      url: '/pages/orderDetail/orderDetail',
-      success(res) {
-        res.eventChannel.emit('acceptDataFromOpenerPage', {
-          orderID: e.currentTarget.dataset.id
-        })
-      }
+      url: '/pages/orderDetail/orderDetail?orderID=' + e.currentTarget.dataset.id
+      // success(res) {
+      //   res.eventChannel.emit('acceptDataFromOpenerPage', {
+      //     orderID: e.currentTarget.dataset.id
+      //   })
+      // }
     })
   },
 
   bindTap: function (e) {
+    console.log(e)
     var that = this
     let orderID = e.currentTarget.dataset.id
     wx.showModal({
@@ -258,27 +217,55 @@ Page({
             data: {
               openID: app.globalData.openid,
               orderID: orderID,
-              status: 210001 // 1表示已接单
+              status: 1 // 1表示已接单
             },
             header: {
               'content-type': 'application/json' // 默认值
             },
-            // 这部分还有逻辑漏洞，待处理
             success(res) {
               console.log(res)
-              that.onLoad()
               wx.showToast({
                 title: '接单成功',
                 icon: 'success',
                 duration: 2000
               })
               that.sendTextMessage(orderID)
+              that.sendNews(e.currentTarget.dataset.index, orderID)
+              that.onLoad()
             }
           })
           console.log("确定接单")
         } else if (res.cancel) {
           console.log('用户点击取消')
         }
+      }
+    })
+  },
+
+  // 发送订阅消息
+  sendNews: function (index, orderID) {
+    var that = this
+    var thing = this.data.objectList[index].description
+    var id = this.data.objectList[index].openID
+    wx.requestSubscribeMessage({
+      tmplIds: ['-2rR-cToA71rppf96_dijww9iBIpNfL7B-89W6KtsRE'],
+      success(res) {
+        wx.cloud.callFunction({
+          name: 'subscribe',
+          data: {
+            openid: id,
+            string: orderID,
+            state: '已接单',
+            name: app.globalData.nickName,
+            thing: thing
+          },
+          success(res) {
+            console.log('成功', res);
+          },
+          fail(res) {
+            console.log('失败', res);
+          }
+        })
       }
     })
   },
@@ -322,7 +309,7 @@ Page({
       success(res) {
         console.log(res)
         var data = res.data
-
+        console.log(data.avatar)
         if (res.statusCode == 201) {
           let id = data.openID,
             avatar = data.avatar,
@@ -335,7 +322,7 @@ Page({
               type: wx.GoEasyIM.SCENE.PRIVATE,
               data: {
                 name: name,
-                avatar: "/images/bupt1.jpg"
+                avatar: avatar
               }
             }
           });

@@ -64,7 +64,7 @@
           ￥{{item.money}}
         </view>
         <view>
-          <van-button bindtap="bindTap" data-id="{{item.orderID}}" color="#4A90E2" size="small">接单</van-button>
+          <van-button bindtap="bindTap" data-id="{{item.orderID}}" data-index="{{index}}" color="#4A90E2" size="small">接单</van-button>
         </view>
       </view>
     </view>

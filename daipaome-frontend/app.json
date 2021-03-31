@@ -4,7 +4,12 @@
       "desc": "你的位置信息将用于获取...."
     }
   },
-  
+  "plugins": {
+    "routePlan": {
+      "version": "1.0.12",
+      "provider": "wx50b5593e81dd937a"
+    }
+  },
   "requiredBackgroundModes": [
     "location"
   ],
@@ -28,7 +33,9 @@
     "pages/releaseFruit/releaseFruit",
     "pages/IM/IM",
     "pages/chat/groupChat/groupChat",
-		"pages/chat/privateChat/privateChat"
+    "pages/chat/privateChat/privateChat",
+    "pages/userInfo/userInfo",
+    "pages/changeNickname/changeNickname"
   ],
   "window": {
     "backgroundTextStyle": "light",

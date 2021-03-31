@@ -1,32 +1,36 @@
 <!--pages/usercenter/usercenter.wxml-->
 <!--pages/set/set.wxml-->
-<van-skeleton 
-  avatar="ture"
-  vatar-size="48px"
-  row="2"
-  loading="{{getIt}}"
->
-  <image class="userinfo-avatar" src="{{avatar}}" mode="cover"></image>
-  <text class="nickname">{{nickname}}</text>
-  <view>id:123421</view>
-</van-skeleton>
-<van-divider />
-<mp-cells>
-  <mp-cell>
-  <view class="categoryList">
-    <block wx:for="{{categoryList}}">
-      <view class="category-info">
-        <image src="{{item.src}}" class="category-image" bindtap="userSet" id="{{index}}"></image>
-        <view class="category-text">{{item.name}}</view>
-      </view>
-    </block>
-  </view>
-</mp-cell>
-  <mp-cell title="个人信息" hover="true" link url="../userInfomation/userInfomation"></mp-cell>
+<!-- <mp-cells>
+  <mp-cell id="avatar" title="头像：" hover="true" bindtap="changeAvatar">
+    <image class="userinfo-avatar" src="{{avatar}}" mode="cover"></image>
+  </mp-cell>
+  <mp-cell id="nickname" title="昵称: " link hover="true" bindtap="setting">
+    <text style="margin:12px">{{nickname}}</text>
+  </mp-cell>
+  <mp-cell id="sex" title="性别：" link hover="true" bindtap="setting">
+    <text>{{sex}}</text>
+  </mp-cell>
+  <mp-cell id="phone" title="手机号：" link hover="true" bindtap="setting">
+    <text>{{phone}}</text>
+  </mp-cell>
   <mp-cell title="订单管理" hover="true" link url="../order/order"></mp-cell>
   <mp-cell title="常用地址设置" hover="true" link url="../setAddr/setAddr"></mp-cell>
   <mp-cell title="密码设置" hover="true" link url="../setPwd/setPwd"></mp-cell>
-</mp-cells>
-<!--  <mp-cell id="avatar" title="头像：" hover="true" bindtap="changeAvatar">
-    <image wx:if="{{getIt}}" class="userinfo-avatar" src="{{avatar}}" mode="cover"></image>
-  </mp-cell> -->
+</mp-cells> -->
+
+<view class="head">
+  <image class="avatar" src='{{avatarUrl}}'></image>
+  <view class='content'>
+    <view style="font-weight:bold;font-size:18px;margin-bottom:20px">{{nickName}}</view>
+  </view>
+</view>
+
+<van-cell-group>
+  <van-cell icon="user-circle-o" is-link title="我的资料" link-type="navigateTo" url="/pages/userInfo/userInfo" />
+  <van-cell icon="home-o" is-link title="常用地址" link-type="switchTab" url="/pages/manageOrder/manageOrder" />
+</van-cell-group>
+
+<van-cell-group custom-class="gap">
+  <van-cell icon="orders-o" is-link title="订单管理" link-type="navigateTo" url="/pages/manageOrder/manageOrder" />
+  <van-cell icon="more-o" is-link title="问题反馈" link-type="switchTab" url="/pages/manageOrder/manageOrder" />
+</van-cell-group>

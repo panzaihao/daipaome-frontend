@@ -41,6 +41,7 @@ App({
     openid: "",
     avatatUrl: '',
     nickName: '',
+    gender: '',
     user: {},
     imService: null,
     backend_server: '49.232.162.117:8000',
