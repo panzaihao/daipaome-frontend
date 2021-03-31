@@ -23,14 +23,12 @@ Page({
       app.globalData.userInfo = e.detail.userInfo;
       app.globalData.avatarUrl = e.detail.userInfo.avatarUrl
       app.globalData.nickName = e.detail.userInfo.nickName
-      console.log(e.detail.userInfo.avatarUrl)
+      app.globalData.gender = e.detail.userInfo.gender
+
       //插入登录的用户的相关信息到数据库
       let that = this;
       that.insertUserInfo(e);
     }
-    wx.switchTab({
-      url: '/pages/home/home',
-    })
   },
 
   // 获取用户openid
@@ -44,7 +42,7 @@ Page({
         app.globalData.openid = res.result.openid
         // 查看是否授权
         wx.request({
-          url: 'http://' + app.globalData.backend_server + '/addAddr',
+          url: 'http://' + app.globalData.backend_server + '/checkAuthorized',
           data: {
             openID: res.result.openid
           },
@@ -53,7 +51,10 @@ Page({
           },
           success(res) {
             console.log(res)
-            if (res.isAuthorized == 1) {
+            if (res.data.isAuthorized == 1) {
+              app.globalData.avatarUrl = res.data.avatarUrl
+              app.globalData.nickName = res.data.nickname
+              app.globalData.gender = ( res.data.sex == true ? 1 : 0)
               wx.switchTab({
                 url: '/pages/home/home',
               })
@@ -76,11 +77,13 @@ Page({
     var openid = ''
     var nickname = rawData.nickName
     var sex = rawData.gender
+    var avatarUrl = rawData.avatarUrl
 
     var data = {
       openID: app.globalData.openid,
       nickname,
       sex,
+      avatarUrl // add
     };
 
     util.request(api.AuthLogin, data, "POST").then(function (res) {
@@ -94,8 +97,6 @@ Page({
           url: "../home/home",
         });
       }
-    }).catch( err => {
-      console.log(err)
     });
   },
 });
