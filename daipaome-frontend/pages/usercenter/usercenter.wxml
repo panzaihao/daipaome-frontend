@@ -34,3 +34,7 @@
   <van-cell icon="orders-o" is-link title="订单管理" link-type="navigateTo" url="/pages/manageOrder/manageOrder" />
   <van-cell icon="more-o" is-link title="问题反馈" link-type="switchTab" url="/pages/manageOrder/manageOrder" />
 </van-cell-group>
+
+<van-cell-group>
+  <van-cell icon="thumb-circle-o" title="您已接单：">{{ordersNum}} 单</van-cell>
+</van-cell-group>

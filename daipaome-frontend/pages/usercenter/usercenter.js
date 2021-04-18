@@ -185,13 +185,43 @@ const app = getApp()
 Page({
   data: {
     avatarUrl: '',
-    nickName: ''
+    nickName: '',
+    ordersNum: 0
   },
 
   onLoad: function(options) {
     this.setData({
       avatarUrl: app.globalData.avatarUrl,
       nickName: app.globalData.nickName
+    })
+    var that = this
+    wx.request({
+      url: 'http://'+app.globalData.backend_server+'/userInfo',
+      method: 'GET',
+      data: {
+        openid: app.globalData.openid,
+      },
+      header: {
+        'content-type': 'application/json' // 默认值
+      },
+      success(res){
+        console.log(res)
+        var data = res.data
+        if(res.statusCode.toString()[0] === '2'){
+          that.setData({
+            nickname: app.globalData.nickname,
+            sex: app.globalData.sex,
+            avatar: 'http://'+app.globalData.backend_server+data.avatar,
+            phone: data.phone,
+            ordersNum: data.ordersNum
+          })
+        } else {
+          wx.showToast({
+            title: '服务器异常！',
+            duration: 2000
+          })
+        }
+      }
     })
   }
 })
